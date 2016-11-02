@@ -100,9 +100,17 @@ model.response(frame.with.intercept)
 
 Build a function that takes as input a formula and optionally, through the `...` variable, a data frame and build the model matrix from the formula and optional data.
 
+```{r}
+# YOUR SOLUTION HERE
+```
+
 #### Fitting general models
 
 Extend the function you wrote earlier for fitting lines to a function that can fit any formula.
+
+```{r}
+# YOUR SOLUTION HERE
+```
 
 
 ### Model matrices without response variables
