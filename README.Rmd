@@ -1,5 +1,5 @@
 ---
-title: "More R"
+title: "Project exercises 2"
 author: "Your Name"
 date: "`r Sys.Date()`"
 output:
