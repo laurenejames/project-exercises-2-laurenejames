@@ -163,7 +163,10 @@ model.response(frame.with.intercept)
 Build a function that takes as input a formula and optionally, through the `...` variable, a data frame and build the model matrix from the formula and optional data.
 
 ``` r
-# YOUR SOLUTION HERE
+model_matrix <- function(formula, ...) {
+  model.matrix(formula, ...)
+}
+
 ```
 
 #### Fitting general models
@@ -233,7 +236,9 @@ model.matrix(responseless.formula, frame)
 Write a function that takes as input a formula and a data frame as input that does *not* contain the response variable and build the model matrix for that.
 
 ``` r
-# YOUR SOLUTION HERE
+model_matrix_responseless <- function(responseless.formula, ...) {
+  model.matrix(responseless.formula, ...)
+}
 ```
 
 #### Predicting new targets
