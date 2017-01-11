@@ -102,6 +102,9 @@ Build a function that takes as input a formula and optionally, through the `...`
 
 ```{r}
 # YOUR SOLUTION HERE
+my_modelmatrix = function(formula, ...){
+  model.matrix(formula, ...)
+}
 ```
 
 #### Fitting general models
@@ -110,6 +113,27 @@ Extend the function you wrote earlier for fitting lines to a function that can f
 
 ```{r}
 # YOUR SOLUTION HERE
+make_posterior <- function(x, y, alpha, beta,...) {
+  theta_x = my_modelmatrix(formula, ...)
+  Sigma_xy_inverse = diag(alpha, nrow = 2) + beta * t(theta_x) %*% theta_x
+
+  Sigma_xy = solve(Sigma_xy_inverse)
+  mu_xy = beta * Sigma_xy %*% t(theta_x) %*% y
+
+  if(stats == T) {
+    return(list(Sigma_xy = Sigma_xy, mu_xy = mu_xy))
+  }
+  else{
+    result = function(n=1) mvrnorm(n, mu = mu_xy, Sigma = Sigma_xy)
+    return(result)
+  }
+}
+
+sample_from_posterior <- function(n, x, y, alpha, beta, ...) {
+  result = as.data.frame(make_posterior(x, y, alpha, beta, stats = F)(n))
+  colnames(result) = c("w0", "w1")
+  return(result)
+}
 ```
 
 
@@ -151,6 +175,11 @@ Write a function that takes as input a formula and a data frame as input that do
 
 ```{r}
 # YOUR SOLUTION HERE
+noresponsemat = function(formula, ...){
+  responselessformula <- delete.response(terms(formula))
+  dataframe <- model.frame(responselessformula,...)
+  model.matrix(responselessformula, dataframe)
+}
 ```
 
 #### Predicting new targets
@@ -159,5 +188,15 @@ Update the function you wrote last week for predicting the values for new variab
 
 ```{r}
 # YOUR SOLUTION HERE
+predict_new_dist <- function(formula, posterior, beta, ...) {
+  new_x = noresponsemat(formula, ...)
+  my_mean = posterior$mu_xy
+  my_s = posterior$Sigma_xy
+
+  Std = sqrt(1/beta + (t(new_x) %*% my_s %*% new_x))
+  mean = sum(t(my_mean) %*% new_x)
+
+  list(Std = Std, mean = mean)
+}
 ```
 
